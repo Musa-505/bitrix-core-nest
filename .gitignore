@@ -1,0 +1,33 @@
+# Node.js
+node_modules/
+dist/
+.env
+.env.*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
+
+# Docker
+*.local
+docker-compose.override.yml
+
+# VS Code
+.vscode/
+
+# PM2
+pids
+*.pid
+*.seed
+
+# coverage
+coverage/
+.nyc_output/

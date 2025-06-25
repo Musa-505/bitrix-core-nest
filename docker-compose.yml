@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:6.2
+    ports:
+      - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  core-service:
+    build: ./core-service
+    depends_on:
+      - postgres
+      - rabbitmq
+    environment:
+      DATABASE_URL: postgres://user:password@postgres:5432/core
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    ports:
+      - "3000:3000"
+
+  bitrix-service:
+    build: ./bitrix-service
+    depends_on:
+      - redis
+      - rabbitmq
+    environment:
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      REDIS_HOST: redis
+    ports:
+      - "3001:3001"
