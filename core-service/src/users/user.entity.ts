@@ -1,4 +1,12 @@
+// core-service/src/users/user.entity.ts
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+
+export enum UserStage {
+  NEW = 'NEW',
+  PREPAYMENT_INVOICE = 'PREPAYMENT_INVOICE',
+  CONTRACT_SIGNED = 'CONTRACT_SIGNED',
+  COMPLETED = 'COMPLETED',
+}
 
 @Entity()
 export class User {
@@ -8,11 +16,15 @@ export class User {
   @Column()
   full_name: string;
 
-  @Column()
+  @Column({ unique: true })
   phone: string;
 
-  @Column()
-  stage: string;
+  @Column({
+    type: 'enum',
+    enum: UserStage,
+    default: UserStage.NEW,
+  })
+  stage: UserStage;
 
   @Column({ nullable: true })
   bitrix_id?: number;
